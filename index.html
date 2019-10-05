@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.0.1/css/ol.css" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.0.1/build/ol.js"></script>
+</head>
+<style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+</style>
+<body>
+
+<div class="jumbotron text-center">
+  <p id="demo"></p>
+  <p>Resize this responsive page to see the effect!</p> 
+</div>
+
+  
+<div class="container">
+  <div id="map" class="map">
+  </div>
+</div>
+
+<script>
+	var myElement = document.getElementById("demo");
+	setInterval(timer,1000);
+
+	function timer(){
+		var d = new Date();
+		myElement.innerHTML = "<b>" + d + "</b>";
+	}
+
+	var map = new ol.Map({ 
+		target: 'map', 
+		layers: [
+		  new ol.layer.Tile({
+		    source: new ol.source.OSM()
+		  })
+		], 
+		view: new ol.View({
+		  center: ol.proj.fromLonLat([12.48, 42]), 
+		  zoom: 10 
+		})
+	});
+</script>
+</body>
+</html>
