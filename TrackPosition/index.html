@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <title>Geolocation</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.0.1/css/ol.css" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- Include Leaflet CSS file in the head section of your document -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="crossorigin=""/>
@@ -13,30 +18,43 @@
     <style>
       .map {
         width: 100%;
-        height:400px;
+        height:600px;
       }
     </style>
 
   </head>
   <body>
-    <div id="map" class="map"></div>
-    <div id="info" style="display: none;"></div>
+    <div class="jumbotron text-center">
+      <p id="demo"></p>
+      <p>Resize this responsive page to see the effect!</p> 
+    </div>
     
+	<div id="map" class="map"></div>
+    <div id="info" style="display: none;"></div>
+
+    <button type="button" onclick="getLatlon()">Request Location</button> 
    
     <script>
-	  var mymap = L.map('map').setView([42, 12], 4);
+	  var myElement = document.getElementById("demo");
+	  setInterval(timer,1000);
+
+	  function timer(){
+		var d = new Date();
+		myElement.innerHTML = "<b>" + d + "</b>";
+	  }
+	  var mymap = L.map('map').setView([42.090, 12.27], 16);
 	  	
 	  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-	  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	  //attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	  maxZoom: 18,
 	  id: 'mapbox.streets',
 	  accessToken: 'pk.eyJ1IjoiZnJhbmNoaW5vNDQiLCJhIjoiY2sxZDZpaHc1MDRyODNtbzU3OWRrdXJmYyJ9.Bm9WKSJ_nQq3VNXIkIB7VA'
       }).addTo(mymap);
-
+	  
 	  //  Let’s add a marker: 
 	  var marker = L.marker([42, 12]).addTo(mymap);
 
-	  // Let's add a circle 
+	  /* Let's add a circle 
 	  var circle = L.circle([42, 13], {
 		color: 'red',
 		fillColor: '#f03',
@@ -48,15 +66,33 @@
 	  var polygon = L.polygon([
 	    [51.509, -0.08],
 	    [51.503, -0.06],
-	    [51.51, -0.047]
-])      .addTo(mymap);
-        
+	    [51.51, -0.047]])
+		.addTo(mymap);
+		*/
+
 	  // Dealing with events
 	  function onMapClick(e){
 	  	  alert("You clicked the map at " + e.latlng)
 	  }
 
 	  mymap.on('click',onMapClick);
-	</script>
-  </body>
+	  
+	  function getLatlon() {
+	    // set endpoint and your access key
+	    var ip = prompt('IpV4 address:');
+        var access_key = '3d24ad81fabbb92ad6a29d8472cd7052';
+
+		// get the API result via jQuery.ajax
+		$.ajax({
+		  url: 'http://api.ipstack.com/' + ip + '?access_key=' + access_key, 
+		  dataType: 'jsonp', 
+		  success: function(json) {	
+			// output the "capital" object inside "location" 
+			alert(json.location.capital);
+		}
+		});
+      }
+	  
+   </script>
+ </body>
 </html>
